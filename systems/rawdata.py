@@ -158,6 +158,27 @@ class RawData(SystemStage):
         return vol
 
     @output()
+    def get_percentage_returns(self, instrument_code):
+        """
+        Get percentage returns
+
+        Useful statistic, also used for some trading rules
+
+        This is an optional subsystem; forecasts can go straight to system.data
+        :param instrument_code: Instrument to get prices for
+        :type trading_rules: str
+
+        :returns: Tx1 pd.DataFrame
+        """
+
+        denom_price = self.daily_denominator_price(instrument_code)
+        num_returns = self.daily_returns(instrument_code)
+        perc_returns = num_returns/denom_price.ffill()
+
+        return perc_returns
+
+
+    @output()
     def get_daily_percentage_volatility(self, instrument_code):
         """
         Get percentage returns normalised by recent vol
@@ -293,6 +314,26 @@ class RawData(SystemStage):
             (normalised_price_this_instrument.index).ffill()
 
         return normalised_price_for_asset_class
+
+    @output()
+    def get_skew(self, instrument_code):
+        """
+        Get percentage returns
+
+        Useful statistic, also used for some trading rules
+
+        This is an optional subsystem; forecasts can go straight to system.data
+        :param instrument_code: Instrument to get prices for
+        :type trading_rules: str
+
+        :returns: Tx1 pd.DataFrame
+        """
+
+        denom_price = self.daily_denominator_price(instrument_code)
+        num_returns = self.daily_returns(instrument_code)
+        perc_returns = num_returns/denom_price.ffill()
+
+        return perc_returns
 
 
 if __name__ == '__main__':
